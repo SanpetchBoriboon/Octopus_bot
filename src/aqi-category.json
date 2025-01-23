@@ -1,0 +1,40 @@
+{
+    "aqi": {
+        "good": {
+            "min": 0,
+            "max": 50,
+            "description": "Good air quality is considered satisfactory, and air pollution poses little or no risk.",
+            "codeColor": "#00e400"
+        },
+        "moderate": {
+            "min": 51,
+            "max": 100,
+            "description": "moderate air quality, but some people may experience health effects",
+            "codeColor": "#ffff00"
+        },
+        "unhealthyForSensitiveGroups": {
+            "min": 101,
+            "max": 200,
+            "description": "Unhealthy for sensitive groups, but the general public is not likely to be affected",
+            "codeColor": "#ff7e00"
+        },
+        "unhealthy": {
+            "min": 201,
+            "max": 300,
+            "description": "Unhealthy air quality, and everyone may experience health effects",
+            "codeColor": "#ff0000"
+        },
+        "veryUnhealthy": {
+            "min": 301,
+            "max": 400,
+            "description": "Very unhealthy air quality, and everyone may experience more serious health effects",
+            "codeColor": "#a30396"
+        },
+        "hazardous": {
+            "min": 401,
+            "max": 500,
+            "description": "Hazardous air quality, and the entire population is more likely to be affected",
+            "codeColor": "#7e0023"
+        }
+    }
+}
