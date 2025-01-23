@@ -16,16 +16,13 @@ class AirQuality {
     async getAirQualityByLatLong() {
         const { latitude, longitude } = this.pollution;
         const url = `${IQ_AIR_URL}/nearest_city?lat=${latitude}&lon=${longitude}&key=${IQ_AIR_API_KEY}`;
-        const responseIqair = await axios.get(url);
-        const iqairData = responseIqair.data.data;
-        const { city, state, country, current } = iqairData;
+        const iqairData = await axios.get(url);
+        const { city, state, country, current } = iqairData.data.data;
         const { weather, pollution } = current;
         const { ts, aqius, mainus, aqicn, maincn } = pollution;
         const { tp, pr, hu, ws, wd } = weather;
 
-        let descriptionAdvice = "", emoji = "", flagCondition = "";
-
-        console.log(Object.keys(aqi));
+        let descriptionAdvice = "", emoji = "", flagCondition = "", flagCount = [];
 
         if (aqius <= 50) {
             let { description, flag } = aqi[Object.keys(aqi)[0]];
@@ -33,38 +30,58 @@ class AirQuality {
             descriptionAdvice = description;
             flagCondition = flag;
         } else if (aqius > 50 && aqius <= 100) {
-            let { description, flag } = aqi[Object.keys(aqi)[1]];
-            emoji = "😊";
+            let { description } = aqi[Object.keys(aqi)[1]];
+            emoji = "😐";
             descriptionAdvice = description;
-            flagCondition = flag;
+            for(let i = 0; i < 2; i++) {
+                let { flag } = aqi[Object.keys(aqi)[i]]
+                flagCount.push(flag)
+            }
+            flagCondition = flagCount.join("");
         } else if (aqius > 100 && aqius <= 200) {
-            let { description, flag } = aqi[Object.keys(aqi)[2]];
-            emoji = "😷";
+            let { description } = aqi[Object.keys(aqi)[2]];
+            emoji = "🙁";
             descriptionAdvice = description;
-            flagCondition = flag;
+            for(let i = 0; i < 3; i++) {
+                let { flag } = aqi[Object.keys(aqi)[i]]
+                flagCount.push(flag)
+            }
+            flagCondition = flagCount.join("");
         } else if (aqius > 200 && aqius <= 300) {
-            let { description, flag } = aqi[Object.keys(aqi)[3]];
-            emoji = "😷";
+            let { description } = aqi[Object.keys(aqi)[3]];
+            emoji = "😰";
             descriptionAdvice = description;
-            flagCondition = flag;
+            for(let i = 0; i < 4; i++) {
+                let { flag } = aqi[Object.keys(aqi)[i]]
+                flagCount.push(flag)
+            }
+            flagCondition = flagCount.join("");
         } else if (aqius > 300 && aqius <= 400) {
-            let { description, flag } = aqi[Object.keys(aqi)[4]];
-            emoji = "😷";
+            let { description } = aqi[Object.keys(aqi)[4]];
+            emoji = "😱";
             descriptionAdvice = description;
-            flagCondition = flag;
+            for(let i = 0; i < 5; i++) {
+                let { flag } = aqi[Object.keys(aqi)[i]]
+                flagCount.push(flag)
+            }
+            flagCondition = flagCount.join("");
         } else if (aqius > 400) {
-            let { description, flag } = aqi[Object.keys(aqi)[5]];
-            emoji = "😷";
+            let { description } = aqi[Object.keys(aqi)[5]];
+            emoji = "🤯";
             descriptionAdvice = description;
-            flagCondition = flag;
+            for(let i = 0; i < 6; i++) {
+                let { flag } = aqi[Object.keys(aqi)[i]]
+                flagCount.push(flag)
+            }
+            flagCondition = flagCount.join("");
         }
 
         const location = `<a><b>${city}, ${state}, ${country}</b> 📍 </a>`;
         const time = `<a>Date Time: <b>${format(new Date(), "dd MMM yyyy hh:mm aaaa")}</b></a>`;
         const weatherData = `<a>Temperature: <b>${tp}°C</b></a>`;
         const pollutionData = `<a>AQI: <b>${aqius}</b></a>`;
-        const advice = `<a> <b>${descriptionAdvice}</b> ${emoji}</a>`;
-        const messageText = `${location}\n${time}\n${weatherData}\n${pollutionData}\n${flagCondition}${flagCondition}${flagCondition}\n${advice}`;
+        const advice = `<a><b>${descriptionAdvice}</b> ${emoji}</a>`;
+        const messageText = `${location}\n${time}\n${weatherData}\n${pollutionData} ${flagCondition}\n\n${advice}`;
 
         return { messageText };
     }
