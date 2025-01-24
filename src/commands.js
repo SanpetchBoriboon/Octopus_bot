@@ -1,4 +1,4 @@
-function command(command) {
+function COMMAND(command) {
     let response = {};
     switch (command) {
         case 'start':
@@ -34,4 +34,4 @@ function command(command) {
     return response;
 }
 
-module.exports = { command };
+module.exports = { COMMAND };
