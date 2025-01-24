@@ -1,22 +1,30 @@
 {
-  "name": "tele_bot",
-  "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon --env-file=.env index.js",
-    "bot:dev": "nodemon --env-file=.env bot.js"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
-  "dependencies": {
-    "axios": "1.7.9",
-    "date-fns": "4.1.0",
-    "node-telegram-bot-api": "0.66.0"
-  },
-  "devDependencies": {
-    "nodemon": "^3.1.9"
-  }
+    "name": "tele_bot",
+    "version": "1.0.0",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "dev": "nodemon --env-file=.env index.js",
+        "bot:dev": "nodemon --env-file=.env bot.js",
+        "format:check": "prettier --check .",
+        "format:write": "prettier --write .",
+        "lint:check": "eslint .",
+        "lint:fix": "eslint --fix ."
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "description": "",
+    "dependencies": {
+        "axios": "1.7.9",
+        "date-fns": "4.1.0",
+        "grammy": "^1.34.0",
+        "mongoose": "^8.9.5",
+        "node-telegram-bot-api": "0.66.0"
+    },
+    "devDependencies": {
+        "eslint": "^9.18.0",
+        "nodemon": "^3.1.9",
+        "prettier": "^3.4.2"
+    }
 }
