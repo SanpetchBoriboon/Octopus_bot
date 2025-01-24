@@ -1,46 +1,52 @@
 {
-    "aqi": {
-        "good": {
-            "min": 0,
-            "max": 50,
+    "aqiCategory": [
+        {
+            "level": "Good",
+            "thresholdLevel": 50,
             "description": "Good air quality is considered satisfactory, and air pollution poses little or no risk.",
             "colorCode": "#00e400",
-            "flag": "🟢"
+            "flag": "🟢",
+            "emoji": "😊"
         },
-        "moderate": {
-            "min": 51,
-            "max": 100,
+        {
+            "level": "Moderate",
+            "thresholdLevel": 100,
             "description": "moderate air quality, but some people may experience health effects",
             "colorCode": "#ffff00",
-            "flag": "🟡"
+            "flag": "🟡",
+            "emoji": "😐"
         },
-        "unhealthyForSensitiveGroups": {
-            "min": 101,
-            "max": 200,
+        {
+            "level": "Unhealthy for sensitive groups",
+            "thresholdLevel": 200,
             "description": "Unhealthy for sensitive groups, but the general public is not likely to be affected",
             "colorCode": "#ff7e00",
-            "flag": "🟠"
+            "flag": "🟠",
+            "emoji": "🙁😷"
         },
-        "unhealthy": {
-            "min": 201,
-            "max": 300,
+        {
+            "level": "Unhealthy",
+            "thresholdLevel": 300,
             "description": "Unhealthy air quality, and everyone may experience health effects",
             "colorCode": "#ff0000",
-            "flag": "🔴"
+            "flag": "🔴",
+            "emoji": "😰😷"
         },
-        "veryUnhealthy": {
-            "min": 301,
-            "max": 400,
+        {
+            "level": "Very unhealthy",
+            "thresholdLevel": 400,
             "description": "Very unhealthy air quality, and everyone may experience more serious health effects",
             "colorCode": "#a30396",
-            "flag": "🟣"
+            "flag": "🟣",
+            "emoji": "😱😷"
         },
-        "hazardous": {
-            "min": 401,
-            "max": 500,
+        {
+            "level": "Hzardous",
+            "thresholdLevel": 500,
             "description": "Hazardous air quality, and the entire population is more likely to be affected",
             "colorCode": "#7e0023",
-            "flag": "🟤"
+            "flag": "🟤",
+            "emoji": "🤯😷"
         }
-    }
+    ]
 }

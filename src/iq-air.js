@@ -1,90 +1,63 @@
-const axios = require("axios");
-const { aqi } = require("./aqi-category");
-const { format } = require("date-fns");
+const { aqiCategory } = require('./aqi-category');
+const { format } = require('date-fns');
+const IQAirServices = require('./services/IQairServices');
 
-const IQ_AIR_URL = "https://api.airvisual.com/v2";
-const IQ_AIR_API_KEY = process.env.IQ_AIR_API_KEY;
+class messageAirQuality {
+    constructor() {}
 
-class AirQuality {
-    constructor(data) {
-        this.city = data.city;
-        this.state = data.state;
-        this.country = data.country;
-        this.pollution = data.pollution;
+    // Helper function to get AQI category details
+    _getAQICategory(aqius) {
+        const aqiQuality = aqiCategory.find((category) => {
+            return aqius <= category.thresholdLevel;
+        });
+
+        let { description, emoji, flag, level } = aqiQuality;
+        return { description, emoji, flag, level };
     }
 
-    async getAirQualityByLatLong() {
-        const { latitude, longitude } = this.pollution;
-        const url = `${IQ_AIR_URL}/nearest_city?lat=${latitude}&lon=${longitude}&key=${IQ_AIR_API_KEY}`;
-        const iqairData = await axios.get(url);
-        const { city, state, country, current } = iqairData.data.data;
-        const { weather, pollution } = current;
-        const { ts, aqius, mainus, aqicn, maincn } = pollution;
-        const { tp, pr, hu, ws, wd } = weather;
+    async messageAirQualityByLatLong(latitude, longitude) {
+        try {
+            const iqAirServices = new IQAirServices();
+            const { data } = await iqAirServices.getAirQualityByLatLong(
+                latitude,
+                longitude
+            );
+            const { city, state, country, current } = data;
 
-        let descriptionAdvice = "", emoji = "", flagCondition = "", flagCount = [];
+            // Check if the data exists
+            if (!city || !state || !country || !current) {
+                throw new Error('Incomplete data received from AirVisual API');
+            }
 
-        if (aqius <= 50) {
-            let { description, flag } = aqi[Object.keys(aqi)[0]];
-            emoji = "😊";
-            descriptionAdvice = description;
-            flagCondition = flag;
-        } else if (aqius > 50 && aqius <= 100) {
-            let { description } = aqi[Object.keys(aqi)[1]];
-            emoji = "😐";
-            descriptionAdvice = description;
-            for(let i = 0; i < 2; i++) {
-                let { flag } = aqi[Object.keys(aqi)[i]]
-                flagCount.push(flag)
-            }
-            flagCondition = flagCount.join("");
-        } else if (aqius > 100 && aqius <= 200) {
-            let { description } = aqi[Object.keys(aqi)[2]];
-            emoji = "🙁";
-            descriptionAdvice = description;
-            for(let i = 0; i < 3; i++) {
-                let { flag } = aqi[Object.keys(aqi)[i]]
-                flagCount.push(flag)
-            }
-            flagCondition = flagCount.join("");
-        } else if (aqius > 200 && aqius <= 300) {
-            let { description } = aqi[Object.keys(aqi)[3]];
-            emoji = "😰";
-            descriptionAdvice = description;
-            for(let i = 0; i < 4; i++) {
-                let { flag } = aqi[Object.keys(aqi)[i]]
-                flagCount.push(flag)
-            }
-            flagCondition = flagCount.join("");
-        } else if (aqius > 300 && aqius <= 400) {
-            let { description } = aqi[Object.keys(aqi)[4]];
-            emoji = "😱";
-            descriptionAdvice = description;
-            for(let i = 0; i < 5; i++) {
-                let { flag } = aqi[Object.keys(aqi)[i]]
-                flagCount.push(flag)
-            }
-            flagCondition = flagCount.join("");
-        } else if (aqius > 400) {
-            let { description } = aqi[Object.keys(aqi)[5]];
-            emoji = "🤯";
-            descriptionAdvice = description;
-            for(let i = 0; i < 6; i++) {
-                let { flag } = aqi[Object.keys(aqi)[i]]
-                flagCount.push(flag)
-            }
-            flagCondition = flagCount.join("");
+            const { weather, pollution } = current;
+            const { tp, pr, hu, ws, wd } = weather;
+            const { aqius } = pollution;
+
+            // Get AQI category details
+            const { description, emoji, flag, level } =
+                this._getAQICategory(aqius);
+
+            // Define the date format
+            const DATE_FORMAT = 'dd MMM yyyy hh:mm aaaa';
+            // Format the data into a message
+            const location = `<a><b>${city}, ${state}, ${country}</b> 📍 </a>`;
+            const time = `<a>Date Time: <b>${format(new Date(), DATE_FORMAT)}</b></a>`;
+            const weatherData = `<a>Temperature: <b>${tp}°C</b></a>`;
+            const pollutionData = `<a>AQI: <b>${aqius}</b></a>`;
+            const advice = `<a><b><i>${level}</i></b> ${description} ${emoji}</a>`;
+
+            // Construct the final message text
+            const messageText = `${location}\n${time}\n${weatherData}\n${pollutionData} ${flag}\n\n${advice}`;
+
+            return { messageText };
+        } catch (error) {
+            console.error('Error fetching air quality data:', error);
+            return {
+                messageText:
+                    'Unable to fetch air quality data. Please try again later.',
+            };
         }
-
-        const location = `<a><b>${city}, ${state}, ${country}</b> 📍 </a>`;
-        const time = `<a>Date Time: <b>${format(new Date(), "dd MMM yyyy hh:mm aaaa")}</b></a>`;
-        const weatherData = `<a>Temperature: <b>${tp}°C</b></a>`;
-        const pollutionData = `<a>AQI: <b>${aqius}</b></a>`;
-        const advice = `<a><b>${descriptionAdvice}</b> ${emoji}</a>`;
-        const messageText = `${location}\n${time}\n${weatherData}\n${pollutionData} ${flagCondition}\n\n${advice}`;
-
-        return { messageText };
     }
 }
 
-module.exports = AirQuality;
+module.exports = messageAirQuality;
