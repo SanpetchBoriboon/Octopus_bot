@@ -1,8 +1,8 @@
-const { aqiCategory } = require('./aqi-category');
+const { aqiCategory } = require('../aqi-category');
 const { format } = require('date-fns');
-const IQAirServices = require('./services/IQairServices');
+const IQAirServices = require('../services/IQairServices');
 
-class messageAirQuality {
+class AirQualityController {
     constructor() {}
 
     // Helper function to get AQI category details
@@ -15,7 +15,7 @@ class messageAirQuality {
         return { description, emoji, flag, level };
     }
 
-    async messageAirQualityByLatLong(latitude, longitude) {
+    async callAirQualityByLatLong(latitude, longitude) {
         try {
             const iqAirServices = new IQAirServices();
             const { data } = await iqAirServices.getAirQualityByLatLong(
@@ -60,4 +60,4 @@ class messageAirQuality {
     }
 }
 
-module.exports = messageAirQuality;
+module.exports = AirQualityController;
