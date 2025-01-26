@@ -1,12 +1,8 @@
 const { Bot, session } = require('grammy');
-const AirQualityController = require('./src/controllers/iqairControllers');
+const { COMMANDS } = require('./src/commands');
+const { LocationMessage } = require('./src/handleMessages');
 
 const bot = new Bot(process.env.BOT_TOKEN);
-
-const COMMANDS = [
-    { command: 'start', description: 'Start interacting with the bot' },
-    { command: 'iqair', description: 'Check the air quality' },
-];
 
 bot.api.setMyCommands(COMMANDS);
 
@@ -33,16 +29,14 @@ bot.command('iqair', (ctx) => {
     });
 });
 
-bot.on(':text', (ctx) => ctx.reply('Text!'));
+bot.on(':text', (ctx) => {
+    console.log(ctx.message);
+    return ctx.reply('Text!');
+});
 bot.on(':photo', (ctx) => ctx.reply('Photo!'));
 bot.on(':location', async (ctx) => {
-    const { latitude, longitude } = ctx.message.location;
-    const iqairController = new AirQualityController();
-    const { messageText } = await iqairController.callAirQualityByLatLong(
-        latitude,
-        longitude
-    );
-    return ctx.reply(messageText, { parse_mode: 'HTML' });
+    const locationMessage = new LocationMessage(ctx);
+    return await locationMessage.replyAqiLocation();
 });
 
 bot.start();

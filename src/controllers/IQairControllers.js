@@ -1,13 +1,13 @@
 const { iqairCategory } = require('../iqairCategory.json');
 const { format } = require('date-fns');
-const IQAirServices = require('../services/IQairServices');
+const IQAirServices = require('../services/iqairServices');
 
-class AirQualityController {
+class IQAirController {
     constructor() {}
 
     _getAQICategory(aqius) {
         const iqairDetail = iqairCategory.find((category) => {
-            return aqius <= category[thresholdLevel];
+            return aqius <= category['thresholdLevel'];
         });
 
         let { description, emoji, flag, level } = iqairDetail;
@@ -55,4 +55,4 @@ class AirQualityController {
     }
 }
 
-module.exports = AirQualityController;
+module.exports = IQAirController;
