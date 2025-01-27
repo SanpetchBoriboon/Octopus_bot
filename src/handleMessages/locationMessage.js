@@ -1,19 +1,19 @@
 const AirQualityController = require('../controllers/iqairControllers');
 
 class LocationMessage {
-    constructor(ctx) {
+    constructor(ctx, settingLanguage) {
         this.ctx = ctx;
+        this.settingLanguage = settingLanguage;
+        this.iqairController = new AirQualityController(this.settingLanguage);
     }
-
     async replyAqiLocation() {
-        console.log(this.ctx.message);
         const { latitude, longitude } = this.ctx.message.location;
-        const iqairController = new AirQualityController();
-        const { messageText } = await iqairController.callAirQualityByLatLong(
-            latitude,
-            longitude
-        );
-        return this.ctx.reply(messageText, { parse_mode: 'HTML' });
+        const { messageText } =
+            await this.iqairController.callAirQualityByLatLong(
+                latitude,
+                longitude
+            );
+        return messageText;
     }
 }
 

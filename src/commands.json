@@ -1,0 +1,7 @@
+{
+    "COMMANDS": [
+        { "command": "start", "description": "Start interacting with the bot" },
+        { "command": "iqair", "description": "Check the air quality" },
+        { "command": "language", "description": "Change the language" }
+    ]
+}

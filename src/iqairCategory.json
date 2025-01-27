@@ -1,52 +1,106 @@
 {
-    "iqairCategory": [
-        {
-            "level": "Good",
-            "thresholdLevel": 50,
-            "description": "Good air quality is considered satisfactory, and air pollution poses little or no risk.",
-            "colorCode": "#00e400",
-            "flag": "🟢",
-            "emoji": "😊"
-        },
-        {
-            "level": "Moderate",
-            "thresholdLevel": 100,
-            "description": "moderate air quality, but some people may experience health effects",
-            "colorCode": "#ffff00",
-            "flag": "🟡",
-            "emoji": "😐"
-        },
-        {
-            "level": "Unhealthy for sensitive groups",
-            "thresholdLevel": 200,
-            "description": "Unhealthy for sensitive groups, but the general public is not likely to be affected",
-            "colorCode": "#ff7e00",
-            "flag": "🟠",
-            "emoji": "🙁😷"
-        },
-        {
-            "level": "Unhealthy",
-            "thresholdLevel": 300,
-            "description": "Unhealthy air quality, and everyone may experience health effects",
-            "colorCode": "#ff0000",
-            "flag": "🔴",
-            "emoji": "😰😷"
-        },
-        {
-            "level": "Very unhealthy",
-            "thresholdLevel": 400,
-            "description": "Very unhealthy air quality, and everyone may experience more serious health effects",
-            "colorCode": "#a30396",
-            "flag": "🟣",
-            "emoji": "😱😷"
-        },
-        {
-            "level": "Hzardous",
-            "thresholdLevel": 500,
-            "description": "Hazardous air quality, and the entire population is more likely to be affected",
-            "colorCode": "#7e0023",
-            "flag": "🟤",
-            "emoji": "🤯😷"
-        }
-    ]
+    "EN": {
+        "IQAIR_CATEGORY": [
+            {
+                "level": "Good",
+                "thresholdLevel": 50,
+                "description": "Good air quality is considered satisfactory, and air pollution poses little or no risk.",
+                "colorCode": "#00e400",
+                "flag": "🟢",
+                "emoji": "😊"
+            },
+            {
+                "level": "Moderate",
+                "thresholdLevel": 100,
+                "description": "moderate air quality, but some people may experience health effects",
+                "colorCode": "#ffff00",
+                "flag": "🟡",
+                "emoji": "😐"
+            },
+            {
+                "level": "Unhealthy for sensitive groups",
+                "thresholdLevel": 200,
+                "description": "Unhealthy for sensitive groups, but the general public is not likely to be affected",
+                "colorCode": "#ff7e00",
+                "flag": "🟠",
+                "emoji": "🙁😷"
+            },
+            {
+                "level": "Unhealthy",
+                "thresholdLevel": 300,
+                "description": "Unhealthy air quality, and everyone may experience health effects",
+                "colorCode": "#ff0000",
+                "flag": "🔴",
+                "emoji": "😰😷"
+            },
+            {
+                "level": "Very unhealthy",
+                "thresholdLevel": 400,
+                "description": "Very unhealthy air quality, and everyone may experience more serious health effects",
+                "colorCode": "#a30396",
+                "flag": "🟣",
+                "emoji": "😱😷"
+            },
+            {
+                "level": "Hzardous",
+                "thresholdLevel": 500,
+                "description": "Hazardous air quality, and the entire population is more likely to be affected",
+                "colorCode": "#7e0023",
+                "flag": "🟤",
+                "emoji": "🤯😷"
+            }
+        ]
+    },
+    "TH": {
+        "IQAIR_CATEGORY": [
+            {
+                "level": "ดี",
+                "thresholdLevel": 50,
+                "description": "คุณภาพอากาศดี ถือว่าพอใจ \nและมลพิษทางอากาศมีความเสี่ยงน้อยหรือไม่มีเลย",
+                "colorCode": "#00e400",
+                "flag": "🟢",
+                "emoji": "😊"
+            },
+            {
+                "level": "ปานกลาง",
+                "thresholdLevel": 100,
+                "description": "คุณภาพอากาศปานกลาง \nแต่บางคนอาจมีผลกระทบต่อสุขภาพ",
+                "colorCode": "#ffff00",
+                "flag": "🟡",
+                "emoji": "😐"
+            },
+            {
+                "level": "ไม่ดีต่อสุขภาพสำหรับกลุ่มที่ไวต่อมลพิษ",
+                "thresholdLevel": 200,
+                "description": "ไม่ดีต่อสุขภาพสำหรับกลุ่มที่ไวต่อมลพิษ \nแต่ประชาชนทั่วไปไม่น่าจะได้รับผลกระทบ",
+                "colorCode": "#ff7e00",
+                "flag": "🟠",
+                "emoji": "🙁😷"
+            },
+            {
+                "level": "ไม่ดีต่อสุขภาพ",
+                "thresholdLevel": 300,
+                "description": "คุณภาพอากาศไม่ดีต่อสุขภาพ \nและทุกคนอาจมีผลกระทบต่อสุขภาพ",
+                "colorCode": "#ff0000",
+                "flag": "🔴",
+                "emoji": "😰😷"
+            },
+            {
+                "level": "ไม่ดีต่อสุขภาพมาก",
+                "thresholdLevel": 400,
+                "description": "คุณภาพอากาศไม่ดีต่อสุขภาพมาก \nและทุกคนอาจมีผลกระทบต่อสุขภาพที่รุนแรงขึ้น",
+                "colorCode": "#a30396",
+                "flag": "🟣",
+                "emoji": "😱😷"
+            },
+            {
+                "level": "เป็นอันตราย",
+                "thresholdLevel": 500,
+                "description": "คุณภาพอากาศเป็นอันตราย \nและประชากรทั้งหมดมีแนวโน้มที่จะได้รับผลกระทบมากขึ้น",
+                "colorCode": "#7e0023",
+                "flag": "🟤",
+                "emoji": "🤯😷"
+            }
+        ]
+    }
 }

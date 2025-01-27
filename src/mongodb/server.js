@@ -2,44 +2,28 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
-const MessageModel = require('./schemas/messageModel');
+const routes = require('./routes');
 
 const app = express();
 const port = 3000;
 
+const mongooseURI = process.env.MONGO_DB;
+
 // Middleware
+cors();
 app.use(bodyParser.json());
+app.use('/', routes);
 
 // MongoDB connection
 mongoose
-    .connect(process.env.MONGO_DB, {
+    .connect(mongooseURI, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     })
     .then(() => console.log('MongoDB connected...'))
     .catch((err) => console.log(err));
-
-app.get('/getMessages', (req, res) => {
-    MessageModel.find({})
-        .then((messages) => res.json(messages))
-        .catch((err) => res.status(400).json(err));
-});
-
-app.post('/addMessage', (req, res) => {
-    const { messageText, messageLocation, chatId, date } = req.body;
-    const newMessage = new MessageModel({
-        messageText,
-        messageLocation,
-        chatId,
-        date,
-    });
-
-    newMessage
-        .save()
-        .then((message) => res.json(message))
-        .catch((err) => res.status(400).json(err));
-});
 
 // Start the server
 app.listen(port, () => {
