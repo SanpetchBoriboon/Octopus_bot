@@ -127,12 +127,12 @@ bot.command('language', async (ctx) => {
 bot.on(':text', (ctx) => ctx.reply('Text!'));
 bot.on(':photo', (ctx) => ctx.reply('Photo!'));
 bot.on(':location', async (ctx) => {
-    console.log(ctx.message.location);
+    (ctx.message.location);
     const settingLanguage = await userProfileController
         .getUserProfile(ctx.chat.id)
         .then((res) => res.settingLanguage)
         .catch((error) => console.error(error));
-    console.log(settingLanguage);
+    (settingLanguage);
     const locationMessage = new LocationMessage(ctx, settingLanguage);
     const message = await locationMessage.replyAqiLocation();
     await ctx.reply(message, {
