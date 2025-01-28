@@ -10,7 +10,7 @@ class IQAirController {
         this.iqairCategory = [];
     }
 
-    _getAQICategory(aqius) {
+    getAQICategory(aqius) {
         if (this.lang === 'en') {
             this.iqairCategory = EN['IQAIR_CATEGORY'];
         } else {
@@ -27,7 +27,8 @@ class IQAirController {
 
     async callAirQualityByLatLong(latitude, longitude) {
         try {
-            const getLocation = await GoogleService.getLocationFromLatLong(
+            const googleService = new GoogleService();
+            const getLocation = await googleService.getLocationFromLatLong(
                 latitude,
                 longitude,
                 this.lang
@@ -49,19 +50,26 @@ class IQAirController {
             const { aqius } = pollution;
 
             const { description, emoji, flag, level } =
-                this._getAQICategory(aqius);
+                this.getAQICategory(aqius);
 
-            const DATE_FORMAT = 'dd MMM yyyy HH:mm';
+            const DATE_FORMAT = 'dd MMMM yyyy HH:mm';
+            const date = new Date();
+            const formattedDateWithBE = `${format(date, 'dd MMMM')} ${Number(format(date, 'yyyy')) + 543} ${format(date, 'HH:mm')}`;
+
             let localeTime =
                 this.lang === 'en'
-                    ? `${format(new Date(), DATE_FORMAT)}`
-                    : `${format(new Date(), DATE_FORMAT, { locale: th })}`;
-                    
+                    ? `${format(date, DATE_FORMAT)}`
+                    : `${formattedDateWithBE}`;
+            let attribute =
+                this.lang === 'en'
+                    ? level + ' air quality'
+                    : 'คุณภาพอากาศ' + level;
+
             const location = `<a>🌏 <b>${getLocation}</b> 📍 </a>`;
             const time = `<a>🗓️ <b>${localeTime}</b></a>`;
             const weatherData = `<a>🌡️ <b>${tp}°C</b></a>`;
             const pollutionData = `<a>☁️ <b>${aqius}</b></a>`;
-            const advice = `<a><b><i>${level} ${emoji}</i></b>\n${description}</a>`;
+            const advice = `<a><b><i>${attribute} ${emoji}</i></b>\n${description}</a>`;
 
             const messageText = `${location}\n${time}\n${weatherData}\n${pollutionData} ${flag}\n\n${advice}`;
 
