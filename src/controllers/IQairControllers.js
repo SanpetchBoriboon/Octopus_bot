@@ -2,22 +2,20 @@ const { EN, TH } = require('../iqairCategory.json');
 const { format } = require('date-fns');
 const { th } = require('date-fns/locale');
 const IQAirServices = require('../services/iqairServices');
-const GoogleService = require('../services/googleServices');
+const GoogleController = require('./googleControllers');
 
 class IQAirController {
-    constructor(lang) {
-        this.lang = lang;
-        this.iqairCategory = [];
-    }
+    constructor() {}
 
-    getAQICategory(aqius) {
-        if (this.lang === 'en') {
-            this.iqairCategory = EN['IQAIR_CATEGORY'];
+    getAQICategory(aqius, lang) {
+        let iqairCategory = [];
+        if (lang === 'en') {
+            iqairCategory = EN['IQAIR_CATEGORY'];
         } else {
-            this.iqairCategory = TH['IQAIR_CATEGORY'];
+            iqairCategory = TH['IQAIR_CATEGORY'];
         }
 
-        const iqairDetail = this.iqairCategory.find((category) => {
+        const iqairDetail = iqairCategory.find((category) => {
             return aqius <= category['thresholdLevel'];
         });
 
@@ -25,13 +23,13 @@ class IQAirController {
         return { description, emoji, flag, level };
     }
 
-    async callAirQualityByLatLong(latitude, longitude) {
+    async callAirQualityByLatLong(latitude, longitude, lang) {
         try {
-            const googleService = new GoogleService();
-            const getLocation = await googleService.getLocationFromLatLong(
+            const googleController = new GoogleController();
+            const getLocation = await googleController.getLocationFromLatLong(
                 latitude,
                 longitude,
-                this.lang
+                lang
             );
             const iqairServices = new IQAirServices();
             const { data } = await iqairServices.getAirQualityByLatLong(
@@ -40,30 +38,34 @@ class IQAirController {
             );
 
             const { current } = data;
-
-            if (!current) {
-                throw new Error('Incomplete data received from AirVisual API');
-            }
-
             const { weather, pollution } = current;
             const { tp, pr, hu, ws, wd } = weather;
             const { aqius } = pollution;
 
-            const { description, emoji, flag, level } =
-                this.getAQICategory(aqius);
+            const { description, emoji, flag, level } = this.getAQICategory(
+                aqius,
+                lang
+            );
 
             const DATE_FORMAT = 'dd MMMM yyyy HH:mm';
             const date = new Date();
-            const formattedDateWithBE = `${format(date, 'dd MMMM')} ${Number(format(date, 'yyyy')) + 543} ${format(date, 'HH:mm')}`;
+            const formattedDateWithBE = `${format(date, 'dd MMMM', { locale: th })} ${Number(format(date, 'yyyy')) + 543} ${format(date, 'HH:mm')}`;
 
-            let localeTime =
-                this.lang === 'en'
-                    ? `${format(date, DATE_FORMAT)}`
-                    : `${formattedDateWithBE}`;
-            let attribute =
-                this.lang === 'en'
-                    ? level + ' air quality'
-                    : 'คุณภาพอากาศ' + level;
+            let localeTime = '';
+            let attribute = '';
+
+            switch (lang) {
+                case 'en':
+                    localeTime = `${format(date, DATE_FORMAT)}`;
+                    attribute = `${level} air quality`;
+                    break;
+                case 'th':
+                    localeTime = `${formattedDateWithBE}`;
+                    attribute = `คุณภาพอากาศ${level}`;
+                    break;
+                default:
+                    break;
+            }
 
             const location = `<a>🌏 <b>${getLocation}</b> 📍 </a>`;
             const time = `<a>🗓️ <b>${localeTime}</b></a>`;
@@ -75,7 +77,6 @@ class IQAirController {
 
             return { messageText };
         } catch (error) {
-            console.error('Error fetching air quality data:', error);
             return {
                 messageText:
                     'Unable to fetch air quality data. Please try again later.',

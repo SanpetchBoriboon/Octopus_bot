@@ -1,18 +1,20 @@
 const { Bot, session } = require('grammy');
 const { COMMANDS } = require('./src/commands.json');
 const { EN, TH } = require('./src/translation/tanslationMessages');
-const { LocationMessage } = require('./src/handleMessages');
-const UserProfileController = require('./src/controllers/userProfileControllers');
+const UserProfileController = require('./src/mongodb/controllers/userProfileControllers');
+const AirQualityController = require('./src/controllers/iqairControllers');
 
 class OctopusBot {
     constructor(token) {
         this.bot = new Bot(token);
         this.userProfileController = new UserProfileController();
+        this.iqairController = new AirQualityController();
         this.initialize();
     }
 
     async getUserLanguageSettings(userId) {
-        const userProfile = await this.userProfileController.getUserProfile(userId);
+        const userProfile =
+            await this.userProfileController.getUserProfile(userId);
         const lang = userProfile?.settingLanguage === 'en' ? 'en' : 'th';
         return { userProfile, lang };
     }
@@ -34,13 +36,14 @@ class OctopusBot {
     setupListeners() {
         this.bot.on(':text', (ctx) => ctx.reply('Text!'));
         this.bot.on(':photo', (ctx) => ctx.reply('Photo!'));
-        this.bot.on(':location', this.handleLocation.bind(this));
+        this.bot.on(':location', this.handleIQAirLocation.bind(this));
         this.bot.on('callback_query:data', this.handleCallbackQuery.bind(this));
     }
 
     async handleStart(ctx) {
         const userId = ctx.chat.id;
-        const { userProfile, lang } = await this.getUserLanguageSettings(userId);
+        const { userProfile, lang } =
+            await this.getUserLanguageSettings(userId);
         if (!userProfile) {
             await this.userProfileController
                 .newUserProfile(userId, 'th')
@@ -96,7 +99,8 @@ class OctopusBot {
     async handleLanguage(ctx) {
         try {
             const userId = ctx.chat.id;
-            const { userProfile, lang } = await this.getUserLanguageSettings(userId);
+            const { userProfile, lang } =
+                await this.getUserLanguageSettings(userId);
             if (!userProfile) {
                 return ctx.reply('Please start the bot first');
             }
@@ -133,13 +137,18 @@ class OctopusBot {
         }
     }
 
-    async handleLocation(ctx) {
+    async handleIQAirLocation(ctx) {
         try {
             const userId = ctx.chat.id;
             const { lang } = await this.getUserLanguageSettings(userId);
-            const locationMessage = new LocationMessage(ctx, lang);
-            const message = await locationMessage.replyAqiLocation();
-            await ctx.reply(message, { parse_mode: 'HTML' });
+            const { latitude, longitude } = ctx.message.location;
+            const { messageText } =
+                await this.iqairController.callAirQualityByLatLong(
+                    latitude,
+                    longitude,
+                    lang
+                );
+            await ctx.reply(messageText, { parse_mode: 'HTML' });
         } catch (error) {
             console.error(error);
         }
@@ -160,7 +169,7 @@ class OctopusBot {
                     await ctx.answerCallbackQuery({
                         text: `Selected ${language}`,
                     });
-                    await ctx.reply(`You changed the language to ${language}`);
+                    await ctx.reply(`You changed the language to '${language}'`);
                     await ctx.reply('Do you want anything else?');
                     await ctx.reply(EN.START);
                     await ctx.reply(EN.SETTING_LANGUAGE);
@@ -172,7 +181,7 @@ class OctopusBot {
                     );
                     language = 'ไทย';
                     await ctx.answerCallbackQuery({
-                        text: `คุณเลือกภาษา ${language}`,
+                        text: `คุณเลือกภาษา '${language}'`,
                     });
                     await ctx.reply(`คุณได้เปลี่ยนเป็นภาษา ${language}`);
                     await ctx.reply('คุณต้องการอะไรเพิ่มเติมหรือไม่?');
@@ -189,5 +198,3 @@ class OctopusBot {
 }
 
 new OctopusBot(process.env.BOT_TOKEN);
-
-

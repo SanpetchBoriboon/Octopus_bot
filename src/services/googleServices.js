@@ -21,15 +21,7 @@ class GoogleService {
             const result = response.data.results[0];
 
             if (result) {
-                const address = result.address_components
-                    .filter(
-                        (address) =>
-                            address.types.includes('political') ||
-                            address.types.includes('postal_code')
-                    )
-                    .map((address) => address.long_name)
-                    .join(', ');
-                return address;
+                return result;
             } else {
                 return null;
             }

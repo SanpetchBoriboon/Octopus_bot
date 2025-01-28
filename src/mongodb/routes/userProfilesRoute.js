@@ -1,50 +1,71 @@
 const express = require('express');
-
 const UserProfileModel = require('../models/userProfileModel');
-const router = express.Router();
 
-router.get('/getProfiles', async (req, res) => {
-    await UserProfileModel.find({})
-        .then((userProfiles) => res.json(userProfiles))
-        .catch((err) => res.status(400).json(err));
-});
+class UserProfilesRoute {
+    constructor() {
+        this.router = express.Router();
+        this.initializeRoutes();
+    }
 
-router.get('/getProfile/:Id', async (req, res) => {
-    const { Id } = req.params;
-    await UserProfileModel.findOne({ userId: Id })
-        .then((userProfile) => {
+    initializeRoutes() {
+        this.router.get('/getProfiles', this.getProfiles);
+        this.router.get('/getProfile/:Id', this.getProfile);
+        this.router.post('/newProfile', this.newProfile);
+        this.router.put('/updateProfile/:Id', this.updateProfile);
+    }
+
+    async getProfiles(req, res) {
+        try {
+            const userProfiles = await UserProfileModel.find({});
+            res.json(userProfiles);
+        } catch (err) {
+            res.status(400).json(err);
+        }
+    }
+
+    async getProfile(req, res) {
+        const { Id } = req.params;
+        try {
+            const userProfile = await UserProfileModel.findOne({ userId: Id });
             if (!userProfile) {
                 return res.json(null);
             }
             res.json(userProfile);
-        })
-        .catch((err) => res.status(400).json(err));
-});
+        } catch (err) {
+            res.status(400).json(err);
+        }
+    }
 
-router.post('/newProfile', async (req, res) => {
-    const { userId, settingLanguage } = req.body;
-    const newUserProfile = new UserProfileModel({
-        userId,
-        settingLanguage,
-    });
+    async newProfile(req, res) {
+        const { userId, settingLanguage } = req.body;
+        const newUserProfile = new UserProfileModel({
+            userId,
+            settingLanguage,
+        });
 
-    await newUserProfile
-        .save()
-        .then((userProfile) => res.json(userProfile))
-        .catch((err) => res.status(400).json(err));
-});
+        try {
+            const userProfile = await newUserProfile.save();
+            res.json(userProfile);
+        } catch (err) {
+            res.status(400).json(err);
+        }
+    }
 
-router.put('/updateProfile/:Id', async (req, res) => {
-    const { Id } = req.params;
-    const { settingLanguage } = req.body;
+    async updateProfile(req, res) {
+        const { Id } = req.params;
+        const { settingLanguage } = req.body;
 
-    await UserProfileModel.findOneAndUpdate(
-        { userId: Id },
-        { settingLanguage },
-        { new: true }
-    )
-        .then((userProfile) => res.json(userProfile))
-        .catch((err) => res.status(400).json(err));
-});
+        try {
+            const userProfile = await UserProfileModel.findOneAndUpdate(
+                { userId: Id },
+                { settingLanguage },
+                { new: true }
+            );
+            res.json(userProfile);
+        } catch (err) {
+            res.status(400).json(err);
+        }
+    }
+}
 
-module.exports = router;
+module.exports = new UserProfilesRoute().router;
