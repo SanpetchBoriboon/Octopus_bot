@@ -7,11 +7,12 @@ class GoogleService {
         this.googleUrl = GOOGLE_URL;
     }
 
-    async getLocationFromLatLong(lat, lng, language = 'en') {
+    async getLocationFromLatLong(latitude, longitude, language = 'en') {
         try {
+            const latlag = [latitude, longitude].join(',');
             const response = await axios.get(this.googleUrl, {
                 params: {
-                    latlng: `${lat},${lng}`,
+                    latlng: latlag,
                     key: this.apiKey,
                     language: language,
                 },
@@ -33,7 +34,7 @@ class GoogleService {
                 return null;
             }
         } catch (error) {
-            console.error(error);
+            throw new Error('Unable to get location from Google API');
         }
     }
 }
