@@ -12,7 +12,7 @@ class OctopusBot {
         this.initialize();
     }
 
-    async getUserLanguageSettings(userId) {
+    async getUserProfile(userId) {
         const userProfile =
             await this.userProfileController.getUserProfile(userId);
         const lang = userProfile?.settingLanguage === 'en' ? 'en' : 'th';
@@ -42,8 +42,7 @@ class OctopusBot {
 
     async handleStart(ctx) {
         const userId = ctx.chat.id;
-        const { userProfile, lang } =
-            await this.getUserLanguageSettings(userId);
+        const { userProfile, lang } = await this.getUserProfile(userId);
         if (!userProfile) {
             await this.userProfileController
                 .newUserProfile(userId, 'th')
@@ -53,7 +52,7 @@ class OctopusBot {
                     await ctx.reply(TH.SETTING_LANGUAGE);
                 })
                 .catch((error) => {
-                    console.error(error);
+                    throw new Error(error);
                 });
         } else {
             const messages = lang === 'en' ? EN : TH;
@@ -65,7 +64,7 @@ class OctopusBot {
 
     async handleIqair(ctx) {
         const userId = ctx.chat.id;
-        const { lang } = await this.getUserLanguageSettings(userId);
+        const { lang } = await this.getUserProfile(userId);
         let myLocation = '';
         let shareLocation = '';
         switch (lang) {
@@ -76,6 +75,8 @@ class OctopusBot {
             case 'th':
                 myLocation = TH.MY_LOCATION;
                 shareLocation = TH.SHARE_LOCATION;
+                break;
+            default:
                 break;
         }
 
@@ -99,21 +100,14 @@ class OctopusBot {
     async handleLanguage(ctx) {
         try {
             const userId = ctx.chat.id;
-            const { userProfile, lang } =
-                await this.getUserLanguageSettings(userId);
+            const { userProfile, lang } = await this.getUserProfile(userId);
             if (!userProfile) {
-                return ctx.reply('Please start the bot first');
-            }
-            const messages = lang === 'en' ? EN : TH;
-            const languageOptions =
-                lang === 'en'
-                    ? { en: 'English', th: 'Thai' }
-                    : { en: 'อังกฤษ', th: 'ไทย' };
-
-            await ctx.reply(messages.SETTING_LANGUAGE);
-            await ctx.reply(
-                lang === 'en' ? 'Choose your language' : 'เลือกภาษาของคุณ',
-                {
+                await ctx.reply('Please start the bot first');
+            } else {
+                const messages = lang === 'en' ? EN : TH;
+                const languageOptions = messages.LANGUAGE_OPTIONS;
+                await ctx.reply(messages.SETTING_LANGUAGE);
+                await ctx.reply(messages.CHOICE_LANGUAGE, {
                     reply_markup: {
                         inline_keyboard: [
                             [
@@ -130,17 +124,17 @@ class OctopusBot {
                             ],
                         ],
                     },
-                }
-            );
+                });
+            }
         } catch (error) {
-            console.error(error);
+            throw new Error(error);
         }
     }
 
     async handleIQAirLocation(ctx) {
         try {
             const userId = ctx.chat.id;
-            const { lang } = await this.getUserLanguageSettings(userId);
+            const { lang } = await this.getUserProfile(userId);
             const { latitude, longitude } = ctx.message.location;
             const { messageText } =
                 await this.iqairController.callAirQualityByLatLong(
@@ -150,7 +144,7 @@ class OctopusBot {
                 );
             await ctx.reply(messageText, { parse_mode: 'HTML' });
         } catch (error) {
-            console.error(error);
+            throw new Error(error);
         }
     }
 
@@ -194,7 +188,7 @@ class OctopusBot {
                     break;
             }
         } catch (error) {
-            console.error(error);
+            throw new Error(error);
         }
     }
 }

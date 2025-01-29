@@ -6,6 +6,8 @@ module.exports = {
         HELP: 'To get help, type /help',
         MY_LOCATION: 'My Location',
         SHARE_LOCATION: 'Share your location!',
+        CHOICE_LANGUAGE: 'Choose your language',
+        LANGUAGE_OPTIONS: { en: 'English', th: 'Thai' },
     },
     TH: {
         WELCOME: 'ยินดีต้อนรับสู่ Air Quality Bot! 🌬️',
@@ -14,5 +16,7 @@ module.exports = {
         HELP: 'เพื่อขอความช่วยเหลือ พิมพ์ /help',
         MY_LOCATION: 'ตำแหน่งของฉัน',
         SHARE_LOCATION: 'แชร์ตำแหน่งของคุณ!',
+        CHOICE_LANGUAGE: 'เลือกภาษาของคุณ',
+        LANGUAGE_OPTIONS: { en: 'อังกฤษ', th: 'ไทย' },
     },
 };
