@@ -44,16 +44,25 @@ class OctopusBot {
         const userId = ctx.chat.id;
         const { userProfile, lang } = await this.getUserProfile(userId);
         if (!userProfile) {
-            await this.userProfileController
-                .newUserProfile(userId, 'th')
-                .then(async () => {
-                    await ctx.reply(TH.WELCOME);
-                    await ctx.reply(TH.START);
-                    await ctx.reply(TH.SETTING_LANGUAGE);
-                })
-                .catch((error) => {
-                    throw new Error(error);
-                });
+            await ctx.reply('Please set the language first | กรุณาตั้งค่าภาษาก่อน');
+            await ctx.reply(`${EN.CHOICE_LANGUAGE} | ${TH.CHOICE_LANGUAGE}`, {
+                reply_markup: {
+                    inline_keyboard: [
+                        [
+                            {
+                                text: EN.LANGUAGE_OPTIONS['en'],
+                                callback_data: 'selected_en',
+                            },
+                        ],
+                        [
+                            {
+                                text: TH.LANGUAGE_OPTIONS['th'],
+                                callback_data: 'selected_th',
+                            },
+                        ],
+                    ],
+                },
+            });
         } else {
             const messages = lang === 'en' ? EN : TH;
             await ctx.reply(messages.WELCOME);
@@ -94,7 +103,7 @@ class OctopusBot {
             remove_keyboard: true,
         };
 
-        ctx.reply(shareLocation, { reply_markup: keyboard });
+        await ctx.reply(shareLocation, { reply_markup: keyboard });
     }
 
     async handleLanguage(ctx) {
@@ -105,20 +114,21 @@ class OctopusBot {
                 await ctx.reply('Please start the bot first');
             } else {
                 const messages = lang === 'en' ? EN : TH;
-                const languageOptions = messages.LANGUAGE_OPTIONS;
-                await ctx.reply(messages.SETTING_LANGUAGE);
-                await ctx.reply(messages.CHOICE_LANGUAGE, {
+                const { LANGUAGE_OPTIONS, SETTING_LANGUAGE, CHOICE_LANGUAGE } =
+                    messages;
+                await ctx.reply(SETTING_LANGUAGE);
+                await ctx.reply(CHOICE_LANGUAGE, {
                     reply_markup: {
                         inline_keyboard: [
                             [
                                 {
-                                    text: languageOptions['en'],
+                                    text: LANGUAGE_OPTIONS['en'],
                                     callback_data: 'en',
                                 },
                             ],
                             [
                                 {
-                                    text: languageOptions['th'],
+                                    text: LANGUAGE_OPTIONS['th'],
                                     callback_data: 'th',
                                 },
                             ],
@@ -151,38 +161,59 @@ class OctopusBot {
     async handleCallbackQuery(ctx) {
         try {
             const data = ctx.callbackQuery.data;
-            let language = '';
-
+            const userId = ctx.chat.id;
             switch (data) {
                 case 'en':
                     await this.userProfileController.settingLanguage(
-                        ctx.chat.id,
+                        userId,
                         'en'
                     );
-                    language = 'English';
+                    const selectedMessageEn = `${EN.LANGUAGE_SELECTED} ${EN.LANGUAGE_OPTIONS['en']}`;
                     await ctx.answerCallbackQuery({
-                        text: `Selected ${language}`,
+                        text: selectedMessageEn,
                     });
-                    await ctx.reply(
-                        `You changed the language to '${language}'`
-                    );
-                    await ctx.reply('Do you want anything else?');
+                    await ctx.reply(selectedMessageEn);
+                    await ctx.reply(EN.QUESTION_FOR_HELP);
                     await ctx.reply(EN.START);
                     await ctx.reply(EN.SETTING_LANGUAGE);
                     break;
                 case 'th':
                     await this.userProfileController.settingLanguage(
-                        ctx.chat.id,
+                        userId,
                         'th'
                     );
-                    language = 'ไทย';
+                    const selectedMessageTH = `${TH.LANGUAGE_SELECTED} ${TH.LANGUAGE_OPTIONS['th']}`;
                     await ctx.answerCallbackQuery({
-                        text: `คุณเลือกภาษา '${language}'`,
+                        text: selectedMessageTH,
                     });
-                    await ctx.reply(`คุณได้เปลี่ยนเป็นภาษา ${language}`);
-                    await ctx.reply('คุณต้องการอะไรเพิ่มเติมหรือไม่?');
+                    await ctx.reply(selectedMessageTH);
+                    await ctx.reply(TH.QUESTION_FOR_HELP);
                     await ctx.reply(TH.START);
                     await ctx.reply(TH.SETTING_LANGUAGE);
+                    break;
+                case 'selected_th':
+                    await this.userProfileController
+                        .newUserProfile(userId, 'th')
+                        .then(async () => {
+                            await ctx.reply(TH.WELCOME);
+                            await ctx.reply(TH.START);
+                            await ctx.reply(TH.SETTING_LANGUAGE);
+                        })
+                        .catch((error) => {
+                            throw new Error(error);
+                        });
+                    break;
+                case 'selected_en':
+                    await this.userProfileController
+                        .newUserProfile(userId, 'en')
+                        .then(async () => {
+                            await ctx.reply(EN.WELCOME);
+                            await ctx.reply(EN.START);
+                            await ctx.reply(EN.SETTING_LANGUAGE);
+                        })
+                        .catch((error) => {
+                            throw new Error(error);
+                        });
                     break;
                 default:
                     break;

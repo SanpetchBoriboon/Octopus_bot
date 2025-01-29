@@ -8,6 +8,8 @@ module.exports = {
         SHARE_LOCATION: 'Share your location!',
         CHOICE_LANGUAGE: 'Choose your language',
         LANGUAGE_OPTIONS: { en: 'English', th: 'Thai' },
+        LANGUAGE_SELECTED: 'You have selected the language is',
+        QUESTION_FOR_HELP: 'What do you need help with?',
     },
     TH: {
         WELCOME: 'ยินดีต้อนรับสู่ Air Quality Bot! 🌬️',
@@ -18,5 +20,7 @@ module.exports = {
         SHARE_LOCATION: 'แชร์ตำแหน่งของคุณ!',
         CHOICE_LANGUAGE: 'เลือกภาษาของคุณ',
         LANGUAGE_OPTIONS: { en: 'อังกฤษ', th: 'ไทย' },
+        LANGUAGE_SELECTED: 'คุณเลือกภาษา',
+        QUESTION_FOR_HELP: 'คุณต้องการความช่วยเหลือเรื่องอะไร?',
     },
 };
