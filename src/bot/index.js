@@ -1,7 +1,5 @@
-var OctopusBot = require('./bot');
+const OctopusBot = require('./bot');
 
-var run = function () {
-    new OctopusBot(process.env.BOT_TOKEN);
+exports.run = function (botToken) {
+    new OctopusBot(botToken);
 };
-
-exports.run = run;

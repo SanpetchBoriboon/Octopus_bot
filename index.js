@@ -1,3 +1,3 @@
 const runBot = require('./src/bot')
 
-runBot.run();
+runBot.run(process.env.BOT_TOKEN);
