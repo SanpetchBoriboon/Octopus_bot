@@ -4,9 +4,12 @@
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
+        "server:start": "node --env-file=.env ./src/mongodb/server.js",
+        "bot:start": "node --env-file=.env index.js",
         "server:dev": "nodemon --env-file=.env ./src/mongodb/server.js",
         "bot:dev": "nodemon --env-file=.env index.js",
         "dev": "concurrently \"npm run server:dev\" \"npm run bot:dev\"",
+        "start": "concurrently \"npm run server:start\" \"npm run bot:start\"",
         "format:check": "prettier --check .",
         "format:write": "prettier --write .",
         "lint:check": "eslint .",
