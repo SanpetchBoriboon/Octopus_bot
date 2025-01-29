@@ -169,7 +169,9 @@ class OctopusBot {
                     await ctx.answerCallbackQuery({
                         text: `Selected ${language}`,
                     });
-                    await ctx.reply(`You changed the language to '${language}'`);
+                    await ctx.reply(
+                        `You changed the language to '${language}'`
+                    );
                     await ctx.reply('Do you want anything else?');
                     await ctx.reply(EN.START);
                     await ctx.reply(EN.SETTING_LANGUAGE);

@@ -4,102 +4,115 @@
             {
                 "level": "Good",
                 "thresholdLevel": 50,
-                "description": "Good air quality is considered satisfactory, and air pollution poses little or no risk.",
-                "colorCode": "#00e400",
+                "description": "Air quality is very good, considered satisfactory, and air pollution poses little to no risk.",
+                "healthImpact": "Almost no health impact for the general population, even those with chronic conditions like asthma or lung diseases are unlikely to experience issues.",
+                "lifestyle": "Normal daily life can be maintained with no special precautions.",
+                "flag": "🔵",
+                "emoji": "😊"
+            },
+            {
+                "level": "Fair",
+                "thresholdLevel": 100,
+                "description": "Air quality is good, considered satisfactory, with little to no risk from air pollution.",
+                "healthImpact": "People with respiratory or heart conditions may start to feel some effects, such as asthma flare-ups.",
+                "lifestyle": "People with asthma or health issues may need to avoid intense exercise or prolonged outdoor exposure.",
                 "flag": "🟢",
                 "emoji": "😊"
             },
             {
                 "level": "Moderate",
-                "thresholdLevel": 100,
-                "description": "moderate air quality, but some people may experience health effects",
-                "colorCode": "#ffff00",
+                "thresholdLevel": 150,
+                "description": "Air quality is moderate, but some people may experience health effects.",
+                "healthImpact": "People with chronic conditions may begin to experience symptoms, such as coughing, difficulty breathing, or asthma exacerbation.",
+                "lifestyle": "It is advisable to avoid strenuous outdoor exercise and reduce exposure to high dust areas. Healthy individuals may start to feel discomfort.",
                 "flag": "🟡",
                 "emoji": "😐"
             },
             {
-                "level": "Unhealthy for sensitive groups",
+                "level": "Bad",
                 "thresholdLevel": 200,
-                "description": "Unhealthy for sensitive groups, but the general public is not likely to be affected",
-                "colorCode": "#ff7e00",
+                "description": "Air quality is not good for sensitive groups, but the general population is unlikely to experience serious effects.",
+                "healthImpact": "Health impacts become more severe, such as aggravated asthma, coughing, difficulty breathing, or long-term heart disease risks.",
+                "lifestyle": "Avoid leaving the house unless necessary, especially for vulnerable groups like the elderly, children, and those with chronic conditions.",
                 "flag": "🟠",
                 "emoji": "🙁😷"
             },
             {
-                "level": "Unhealthy",
+                "level": "Hazardous",
                 "thresholdLevel": 300,
-                "description": "Unhealthy air quality, and everyone may experience health effects",
-                "colorCode": "#ff0000",
+                "description": "Air quality is unhealthy for everyone, and health effects may occur for all.",
+                "healthImpact": "Severe health risks, including effects on the respiratory system, heart disease, or neurological symptoms.",
+                "lifestyle": "Avoid leaving the house entirely, especially for sensitive groups such as children, the elderly, and those with preexisting conditions.",
                 "flag": "🔴",
                 "emoji": "😰😷"
             },
             {
-                "level": "Very unhealthy",
+                "level": "Very Hazardous",
                 "thresholdLevel": 400,
-                "description": "Very unhealthy air quality, and everyone may experience more serious health effects",
-                "colorCode": "#a30396",
+                "description": "Air quality is extremely unhealthy, and everyone may experience severe health effects.",
+                "healthImpact": "Extremely dangerous to health, causing severe damage in the short term, such as respiratory system damage, heart failure, or neurological issues.",
+                "lifestyle": "Stay indoors in well-ventilated areas with good air filtration. Use air purifiers at home and avoid exposure to outdoor air.",
                 "flag": "🟣",
                 "emoji": "😱😷"
-            },
-            {
-                "level": "Hzardous",
-                "thresholdLevel": 500,
-                "description": "Hazardous air quality, and the entire population is more likely to be affected",
-                "colorCode": "#7e0023",
-                "flag": "🟤",
-                "emoji": "🤯😷"
             }
         ]
+        
     },
     "TH": {
         "IQAIR_CATEGORY": [
             {
-                "level": "ดี",
+                "level": "ดีมาก",
                 "thresholdLevel": 50,
-                "description": "คุณภาพอากาศดี ถือว่าพอใจ \nและมลพิษทางอากาศมีความเสี่ยงน้อยหรือไม่มีเลย",
-                "colorCode": "#00e400",
+                "description": "คุณภาพอากาศดีมาก ถือว่าพอใจ และมลพิษทางอากาศมีความเสี่ยงน้อยหรือไม่มีเลย",
+                "healthImpact": "แทบไม่มีผลกระทบต่อสุขภาพสำหรับประชาชนทั่วไป แม้แต่ผู้ที่มีโรคประจำตัวเช่น หอบหืดหรือโรคปอดก็ไม่น่ามีปัญหา",
+                "lifestyle": "สามารถใช้ชีวิตประจำวันได้ตามปกติ ไม่มีข้อควรระวังพิเศษ",
+                "flag": "🔵",
+                "emoji": "😊"
+            },
+            {
+                "level": "ดี",
+                "thresholdLevel": 100,
+                "description": "คุณภาพอากาศดี ถือว่าพอใจ และมลพิษทางอากาศมีความเสี่ยงน้อยหรือไม่มีเลย",
+                "healthImpact": "ผู้ที่มีปัญหาสุขภาพเกี่ยวกับระบบทางเดินหายใจหรือหัวใจอาจเริ่มรู้สึกได้ เช่น หอบหืดอาจกำเริบเล็กน้อย",
+                "lifestyle": "ผู้ที่เป็นโรคหอบหืดหรือมีปัญหาสุขภาพอาจต้องหลีกเลี่ยงการออกกำลังกายที่หนักหรือการอยู่กลางแจ้งเป็นเวลานาน",
                 "flag": "🟢",
                 "emoji": "😊"
             },
             {
                 "level": "ปานกลาง",
-                "thresholdLevel": 100,
-                "description": "คุณภาพอากาศปานกลาง \nแต่บางคนอาจมีผลกระทบต่อสุขภาพ",
-                "colorCode": "#ffff00",
+                "thresholdLevel": 150,
+                "description": "คุณภาพอากาศปานกลาง แต่บางคนอาจมีผลกระทบต่อสุขภาพ",
+                "healthImpact": "ผู้ที่มีโรคประจำตัวอาจเริ่มมีอาการ เช่น ไอ, หายใจลำบาก, หรือหอบหืดกำเริบ",
+                "lifestyle": "ควรหลีกเลี่ยงการออกกำลังกายที่หนักกลางแจ้ง และลดการอยู่ในพื้นที่ที่มีฝุ่นมาก ๆ ผู้ที่มีสุขภาพปกติอาจเริ่มรู้สึกไม่สบายได้",
                 "flag": "🟡",
                 "emoji": "😐"
             },
             {
-                "level": "ไม่ดีต่อสุขภาพสำหรับกลุ่มที่ไวต่อมลพิษ",
+                "level": "แย่",
                 "thresholdLevel": 200,
-                "description": "ไม่ดีต่อสุขภาพสำหรับกลุ่มที่ไวต่อมลพิษ \nแต่ประชาชนทั่วไปไม่น่าจะได้รับผลกระทบ",
-                "colorCode": "#ff7e00",
+                "description": "ไม่ดีต่อสุขภาพสำหรับกลุ่มที่ไวต่อมลพิษ แต่ประชาชนทั่วไปไม่น่าจะได้รับผลกระทบ",
+                "healthImpact": "มีผลกระทบต่อสุขภาพที่รุนแรง เช่น อาการหอบหืดกำเริบ, ไอ, หายใจลำบาก หรืออาจเกิดโรคหัวใจในระยะยาว",
+                "lifestyle": "ควรหลีกเลี่ยงการออกจากบ้านหากไม่จำเป็น โดยเฉพาะกลุ่มเสี่ยง เช่น ผู้สูงอายุ, เด็ก, และผู้ที่มีโรคประจำตัว",
                 "flag": "🟠",
                 "emoji": "🙁😷"
             },
             {
-                "level": "ไม่ดีต่อสุขภาพ",
+                "level": "อันตราย",
                 "thresholdLevel": 300,
-                "description": "คุณภาพอากาศไม่ดีต่อสุขภาพ \nและทุกคนอาจมีผลกระทบต่อสุขภาพ",
-                "colorCode": "#ff0000",
+                "description": "คุณภาพอากาศไม่ดีต่อสุขภาพ และทุกคนอาจมีผลกระทบต่อสุขภาพ",
+                "healthImpact": "อันตรายต่อสุขภาพอย่างรุนแรง รวมถึงผลกระทบต่อระบบทางเดินหายใจ, โรคหัวใจ หรืออาการทางระบบประสาท",
+                "lifestyle": "ควรหลีกเลี่ยงการออกจากบ้านโดยเด็ดขาด โดยเฉพาะกลุ่มเสี่ยง เช่น เด็ก, ผู้สูงอายุ, และผู้ที่มีโรคประจำตัว",
                 "flag": "🔴",
                 "emoji": "😰😷"
             },
             {
-                "level": "ไม่ดีต่อสุขภาพมาก",
+                "level": "อันตรายมาก",
                 "thresholdLevel": 400,
-                "description": "คุณภาพอากาศไม่ดีต่อสุขภาพมาก \nและทุกคนอาจมีผลกระทบต่อสุขภาพที่รุนแรงขึ้น",
-                "colorCode": "#a30396",
+                "description": "คุณภาพอากาศไม่ดีต่อสุขภาพมาก และทุกคนอาจมีผลกระทบต่อสุขภาพที่รุนแรงขึ้น",
+                "healthImpact": "อันตรายร้ายแรงต่อสุขภาพ สามารถทำให้เกิดความเสียหายรุนแรงในระยะสั้น เช่น ระบบทางเดินหายใจถูกทำลาย, หัวใจล้มเหลว หรือปัญหาทางระบบประสาท",
+                "lifestyle": "ควรอยู่แต่ในที่ร่มที่มีการกรองอากาศที่ดี และใช้เครื่องกรองอากาศภายในบ้าน หลีกเลี่ยงการสัมผัสกับอากาศภายนอก",
                 "flag": "🟣",
                 "emoji": "😱😷"
-            },
-            {
-                "level": "เป็นอันตราย",
-                "thresholdLevel": 500,
-                "description": "คุณภาพอากาศเป็นอันตราย \nและประชากรทั้งหมดมีแนวโน้มที่จะได้รับผลกระทบมากขึ้น",
-                "colorCode": "#7e0023",
-                "flag": "🟤",
-                "emoji": "🤯😷"
             }
         ]
     }
