@@ -74,26 +74,13 @@ class OctopusBot {
     async handleIqair(ctx) {
         const userId = ctx.chat.id;
         const { lang } = await this.getUserProfile(userId);
-        let myLocation = '';
-        let shareLocation = '';
-        switch (lang) {
-            case 'en':
-                myLocation = EN.MY_LOCATION;
-                shareLocation = EN.SHARE_LOCATION;
-                break;
-            case 'th':
-                myLocation = TH.MY_LOCATION;
-                shareLocation = TH.SHARE_LOCATION;
-                break;
-            default:
-                break;
-        }
-
+        const messages = lang === 'en' ? EN : TH;
+        const { MY_LOCATION, SHARE_LOCATION } = messages;
         const keyboard = {
             keyboard: [
                 [
                     {
-                        text: myLocation,
+                        text: MY_LOCATION,
                         request_location: true,
                     },
                 ],
@@ -103,7 +90,7 @@ class OctopusBot {
             remove_keyboard: true,
         };
 
-        await ctx.reply(shareLocation, { reply_markup: keyboard });
+        await ctx.reply(SHARE_LOCATION, { reply_markup: keyboard });
     }
 
     async handleLanguage(ctx) {
@@ -162,61 +149,30 @@ class OctopusBot {
         try {
             const data = ctx.callbackQuery.data;
             const userId = ctx.chat.id;
-            switch (data) {
-                case 'en':
-                    await this.userProfileController.settingLanguage(
-                        userId,
-                        'en'
-                    );
-                    const selectedMessageEn = `${EN.LANGUAGE_SELECTED} ${EN.LANGUAGE_OPTIONS['en']}`;
-                    await ctx.answerCallbackQuery({
-                        text: selectedMessageEn,
+            const langOptions = {
+                en: EN,
+                th: TH,
+            };
+
+            if (data in langOptions) {
+                await this.userProfileController.settingLanguage(userId, data);
+                const selectedMessage = `${langOptions[data].LANGUAGE_SELECTED} ${langOptions[data].LANGUAGE_OPTIONS[data]}`;
+                await ctx.answerCallbackQuery({ text: selectedMessage });
+                await ctx.reply(selectedMessage);
+                await ctx.reply(langOptions[data].QUESTION_FOR_HELP);
+                await ctx.reply(langOptions[data].START);
+                await ctx.reply(langOptions[data].SETTING_LANGUAGE);
+            } else if (data.startsWith('selected_')) {
+                const selectedLang = data.split('_')[1];
+                await this.userProfileController.newUserProfile(userId, selectedLang)
+                    .then(async () => {
+                        await ctx.reply(langOptions[selectedLang].WELCOME);
+                        await ctx.reply(langOptions[selectedLang].START);
+                        await ctx.reply(langOptions[selectedLang].SETTING_LANGUAGE);
+                    })
+                    .catch((error) => {
+                        throw new Error(error);
                     });
-                    await ctx.reply(selectedMessageEn);
-                    await ctx.reply(EN.QUESTION_FOR_HELP);
-                    await ctx.reply(EN.START);
-                    await ctx.reply(EN.SETTING_LANGUAGE);
-                    break;
-                case 'th':
-                    await this.userProfileController.settingLanguage(
-                        userId,
-                        'th'
-                    );
-                    const selectedMessageTH = `${TH.LANGUAGE_SELECTED} ${TH.LANGUAGE_OPTIONS['th']}`;
-                    await ctx.answerCallbackQuery({
-                        text: selectedMessageTH,
-                    });
-                    await ctx.reply(selectedMessageTH);
-                    await ctx.reply(TH.QUESTION_FOR_HELP);
-                    await ctx.reply(TH.START);
-                    await ctx.reply(TH.SETTING_LANGUAGE);
-                    break;
-                case 'selected_th':
-                    await this.userProfileController
-                        .newUserProfile(userId, 'th')
-                        .then(async () => {
-                            await ctx.reply(TH.WELCOME);
-                            await ctx.reply(TH.START);
-                            await ctx.reply(TH.SETTING_LANGUAGE);
-                        })
-                        .catch((error) => {
-                            throw new Error(error);
-                        });
-                    break;
-                case 'selected_en':
-                    await this.userProfileController
-                        .newUserProfile(userId, 'en')
-                        .then(async () => {
-                            await ctx.reply(EN.WELCOME);
-                            await ctx.reply(EN.START);
-                            await ctx.reply(EN.SETTING_LANGUAGE);
-                        })
-                        .catch((error) => {
-                            throw new Error(error);
-                        });
-                    break;
-                default:
-                    break;
             }
         } catch (error) {
             throw new Error(error);
