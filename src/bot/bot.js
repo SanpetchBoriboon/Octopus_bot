@@ -2,7 +2,7 @@ const { Bot, session } = require('grammy');
 const { COMMANDS } = require('../commands.json');
 const { EN, TH } = require('../translation/tanslationMessages');
 const UserProfileController = require('../mongodb/controllers/userProfileControllers');
-const AirQualityController = require('../controllers/iqairControllers');
+const AirQualityController = require('../controllers/IQairControllers');
 
 class OctopusBot {
     constructor(token) {
