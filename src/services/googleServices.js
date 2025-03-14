@@ -1,4 +1,8 @@
 const axios = require('axios');
+const dotenv = require('dotenv');
+
+dotenv.config();
+
 const { GOOGLE_API_KEY, GOOGLE_URL } = process.env;
 
 class GoogleService {
@@ -21,6 +25,7 @@ class GoogleService {
             const result = response.data.results[0];
 
             if (result) {
+                console.log(result)
                 return result;
             } else {
                 return null;

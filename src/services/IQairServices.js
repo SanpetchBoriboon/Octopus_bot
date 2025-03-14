@@ -1,4 +1,7 @@
 const axios = require('axios');
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 const IQ_AIR_URL = process.env.IQ_AIR_URL;
 const IQ_AIR_API_KEY = process.env.IQ_AIR_API_KEY;

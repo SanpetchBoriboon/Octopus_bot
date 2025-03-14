@@ -1,10 +1,10 @@
-# fly.toml app configuration file generated for shadow-bot on 2025-03-01T14:07:45+07:00
+# fly.toml app configuration file generated for octopusbot on 2025-03-14T15:42:54+07:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'shadow-bot'
-primary_region = 'iad'
+app = 'octopusbot'
+primary_region = 'sin'
 
 [build]
 

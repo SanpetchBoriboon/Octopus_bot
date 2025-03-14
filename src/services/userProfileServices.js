@@ -1,6 +1,9 @@
 const axios = require('axios');
+const dotenv = require('dotenv');
 
-const SERVER_URL = process.env.SERVER_URL || 'http://localhost:3000';
+dotenv.config();
+
+const SERVER_URL = process.env.MONGO_SERVICE;
 
 class UserProfileServices {
     async getUserProfile(Id) {

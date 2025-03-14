@@ -1,4 +1,4 @@
-const UserProfileService = require('../../services/userProfileService');
+const UserProfileService = require('../services/userProfileServices');
 
 class UserProfileController {
     constructor() {
