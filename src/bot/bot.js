@@ -18,6 +18,10 @@ class OctopusBot {
         return { userProfile, lang };
     }
 
+    async newUserProfile(userId, lang) {
+        await this.userProfileController.newUserProfile(userId, lang)
+    }
+
     initialize() {
         this.bot.api.setMyCommands(COMMANDS);
         this.bot.use(session());
@@ -43,6 +47,7 @@ class OctopusBot {
         const userId = ctx.chat.id;
         const { userProfile, lang } = await this.getUserProfile(userId);
         if (!userProfile) {
+            await this.newUserProfile(userId, 'en');
             await ctx.reply('Please set the language first | กรุณาตั้งค่าภาษาก่อน');
             await ctx.reply(`${EN.CHOICE_LANGUAGE} | ${TH.CHOICE_LANGUAGE}`, {
                 reply_markup: {
@@ -62,16 +67,20 @@ class OctopusBot {
 
     async handleIqair(ctx) {
         const userId = ctx.chat.id;
-        const { lang } = await this.getUserProfile(userId);
-        const messages = lang === 'en' ? EN : TH;
-        const keyboard = {
-            keyboard: [[{ text: messages.MY_LOCATION, request_location: true }]],
-            resize_keyboard: true,
-            one_time_keyboard: true,
-            remove_keyboard: true,
-        };
-
-        await ctx.reply(messages.SHARE_LOCATION, { reply_markup: keyboard });
+        const { userProfile, lang } = await this.getUserProfile(userId);
+        if (!userProfile) {
+            await ctx.reply('Please start the bot first');
+        } else {
+            const messages = lang === 'en' ? EN : TH;
+            const keyboard = {
+                keyboard: [[{ text: messages.MY_LOCATION, request_location: true }]],
+                resize_keyboard: true,
+                one_time_keyboard: true,
+                remove_keyboard: true,
+            };
+    
+            await ctx.reply(messages.SHARE_LOCATION, { reply_markup: keyboard });
+        }
     }
 
     async handleLanguage(ctx) {
