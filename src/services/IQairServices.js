@@ -14,9 +14,7 @@ class IQAirServices {
             const url = `${IQ_AIR_URL}/nearest_city?lat=${latitude}&lon=${longitude}&key=${IQ_AIR_API_KEY}`;
             return axios.get(url).then((res) => res.data);
         } catch (error) {
-            throw new Error(
-                'Unable to fetch air quality data. Please try again later.'
-            );
+            throw new Error('Unable to fetch air quality data. Please try again later.');
         }
     }
 }

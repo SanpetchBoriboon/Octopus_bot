@@ -4,6 +4,8 @@ const { EN, TH } = require('../translation/tanslationMessages');
 const UserProfileController = require('../controllers/userProfileControllers');
 const AirQualityController = require('../controllers/IQairControllers');
 
+const START_BOT_MESSAGE = 'Please set the language first | กรุณาตั้งค่าภาษาก่อน';
+
 class OctopusBot {
     constructor(token) {
         this.bot = new Bot(token);
@@ -19,7 +21,7 @@ class OctopusBot {
     }
 
     async newUserProfile(userId, lang) {
-        await this.userProfileController.newUserProfile(userId, lang)
+        await this.userProfileController.newUserProfile(userId, lang);
     }
 
     initialize() {
@@ -48,12 +50,22 @@ class OctopusBot {
         const { userProfile, lang } = await this.getUserProfile(userId);
         if (!userProfile) {
             await this.newUserProfile(userId, 'en');
-            await ctx.reply('Please set the language first | กรุณาตั้งค่าภาษาก่อน');
+            await ctx.reply(START_BOT_MESSAGE);
             await ctx.reply(`${EN.CHOICE_LANGUAGE} | ${TH.CHOICE_LANGUAGE}`, {
                 reply_markup: {
                     inline_keyboard: [
-                        [{ text: EN.LANGUAGE_OPTIONS['en'], callback_data: 'selected_en' }],
-                        [{ text: TH.LANGUAGE_OPTIONS['th'], callback_data: 'selected_th' }],
+                        [
+                            {
+                                text: EN.LANGUAGE_OPTIONS['en'],
+                                callback_data: 'selected_en',
+                            },
+                        ],
+                        [
+                            {
+                                text: TH.LANGUAGE_OPTIONS['th'],
+                                callback_data: 'selected_th',
+                            },
+                        ],
                     ],
                 },
             });
@@ -69,7 +81,7 @@ class OctopusBot {
         const userId = ctx.chat.id;
         const { userProfile, lang } = await this.getUserProfile(userId);
         if (!userProfile) {
-            await ctx.reply('Please start the bot first');
+            await ctx.reply(START_BOT_MESSAGE);
         } else {
             const messages = lang === 'en' ? EN : TH;
             const keyboard = {
@@ -78,8 +90,10 @@ class OctopusBot {
                 one_time_keyboard: true,
                 remove_keyboard: true,
             };
-    
-            await ctx.reply(messages.SHARE_LOCATION, { reply_markup: keyboard });
+
+            await ctx.reply(messages.SHARE_LOCATION, {
+                reply_markup: keyboard,
+            });
         }
     }
 
@@ -87,15 +101,25 @@ class OctopusBot {
         const userId = ctx.chat.id;
         const { userProfile, lang } = await this.getUserProfile(userId);
         if (!userProfile) {
-            await ctx.reply('Please start the bot first');
+            await ctx.reply(START_BOT_MESSAGE);
         } else {
             const messages = lang === 'en' ? EN : TH;
             await ctx.reply(messages.SETTING_LANGUAGE);
             await ctx.reply(messages.CHOICE_LANGUAGE, {
                 reply_markup: {
                     inline_keyboard: [
-                        [{ text: messages.LANGUAGE_OPTIONS['en'], callback_data: 'en' }],
-                        [{ text: messages.LANGUAGE_OPTIONS['th'], callback_data: 'th' }],
+                        [
+                            {
+                                text: messages.LANGUAGE_OPTIONS['en'],
+                                callback_data: 'en',
+                            },
+                        ],
+                        [
+                            {
+                                text: messages.LANGUAGE_OPTIONS['th'],
+                                callback_data: 'th',
+                            },
+                        ],
                     ],
                 },
             });
@@ -124,8 +148,9 @@ class OctopusBot {
             await ctx.reply(langOptions[data].START);
             await ctx.reply(langOptions[data].SETTING_LANGUAGE);
         } else if (data.startsWith('selected_')) {
-            const selectedLang = data.split('_')[1];
-            await this.userProfileController.newUserProfile(userId, selectedLang)
+            const { _word, selectedLang } = data.split('_');
+            await this.userProfileController
+                .newUserProfile(userId, selectedLang)
                 .then(async () => {
                     await ctx.reply(langOptions[selectedLang].WELCOME);
                     await ctx.reply(langOptions[selectedLang].START);

@@ -19,8 +19,7 @@ class IQAirController {
             return aqius <= category['thresholdLevel'];
         });
 
-        let { description, emoji, flag, level, healthImpact, lifestyle } =
-            iqairDetail;
+        let { description, emoji, flag, level, healthImpact, lifestyle } = iqairDetail;
 
         return { description, emoji, flag, level, healthImpact, lifestyle };
     }
@@ -28,26 +27,16 @@ class IQAirController {
     async callAirQualityByLatLong(latitude, longitude, lang) {
         try {
             const googleController = new GoogleController();
-            const getLocation = await googleController.getLocationFromLatLong(
-                latitude,
-                longitude,
-                lang
-            );
+            const getLocation = await googleController.getLocationFromLatLong(latitude, longitude, lang);
             const iqairServices = new IQAirServices();
-            const { data } = await iqairServices.getAirQualityByLatLong(
-                latitude,
-                longitude
-            );
+            const { data } = await iqairServices.getAirQualityByLatLong(latitude, longitude);
 
             const { current } = data;
             const { weather, pollution } = current;
             const { tp, pr, hu, ws, wd } = weather;
             const { aqius } = pollution;
 
-            const { description, emoji, flag, level, healthImpact, lifestyle } = this.getAQICategory(
-                aqius,
-                lang
-            );
+            const { description, emoji, flag, level, healthImpact, lifestyle } = this.getAQICategory(aqius, lang);
 
             const DATE_FORMAT = 'dd MMMM yyyy';
             const date = new Date();
@@ -82,8 +71,7 @@ class IQAirController {
             return { messageText };
         } catch (error) {
             return {
-                messageText:
-                    'Unable to fetch air quality data. Please try again later.',
+                messageText: 'Unable to fetch air quality data. Please try again later.',
             };
         }
     }

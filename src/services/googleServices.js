@@ -25,7 +25,6 @@ class GoogleService {
             const result = response.data.results[0];
 
             if (result) {
-                console.log(result)
                 return result;
             } else {
                 return null;

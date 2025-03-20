@@ -32,12 +32,13 @@ class UserProfileServices {
     }
 
     async updateUserProfile(userId, language) {
+        const data = {
+            settingLanguage: language,
+        };
         try {
             const response = await axios.put(
                 SERVER_URL + '/updateProfile/' + userId,
-                {
-                    settingLanguage: language,
-                }
+                data
             );
             return response.data;
         } catch (error) {
