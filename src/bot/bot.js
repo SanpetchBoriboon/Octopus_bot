@@ -49,7 +49,6 @@ class OctopusBot {
         const userId = ctx.chat.id;
         const { userProfile, lang } = await this.getUserProfile(userId);
         if (!userProfile) {
-            await this.newUserProfile(userId, 'en');
             await ctx.reply(START_BOT_MESSAGE);
             await ctx.reply(`${EN.CHOICE_LANGUAGE} | ${TH.CHOICE_LANGUAGE}`, {
                 reply_markup: {
@@ -83,17 +82,28 @@ class OctopusBot {
         if (!userProfile) {
             await ctx.reply(START_BOT_MESSAGE);
         } else {
+            const role = userProfile.role;
             const messages = lang === 'en' ? EN : TH;
-            const keyboard = {
-                keyboard: [[{ text: messages.MY_LOCATION, request_location: true }]],
-                resize_keyboard: true,
-                one_time_keyboard: true,
-                remove_keyboard: true,
-            };
+            switch (role) {
+                case 'admin':
+                    const keyboard = {
+                        keyboard: [[{ text: messages.MY_LOCATION, request_location: true }]],
+                        resize_keyboard: true,
+                        one_time_keyboard: true,
+                        remove_keyboard: true,
+                    };
 
-            await ctx.reply(messages.SHARE_LOCATION, {
-                reply_markup: keyboard,
-            });
+                    await ctx.reply(messages.SHARE_LOCATION, {
+                        reply_markup: keyboard,
+                    });
+                    break;
+                case 'user':
+                    await ctx.reply('Not allow to access this command');
+                    break;
+                default:
+                    await ctx.reply('Please set the role first');
+                    break;
+            }
         }
     }
 
